@@ -25,10 +25,13 @@ public class GameController : MonoBehaviour {
     public Text scoreText;
     public BackgroundChange background;
 
+    public GameObject rule;
 
     private float timer;
     private int score;
     private int obsCount;
+
+    private bool _gameStart;
 
     private Vector2 bornPos;
 
@@ -39,11 +42,18 @@ public class GameController : MonoBehaviour {
         obsCount = 0;
         _instance = this;
         _playerDead = false;
+        _gameStart = false;
         bornPos = transform.position + new Vector3(12.0f, 0.79f, 0);        
     }
 
     void Update()
-    {
+    { 
+        if(!_gameStart)
+        {
+            scoreText.text = "";
+            return;
+        }
+
         timer += Time.deltaTime;
 
         if(!_playerDead)
@@ -53,12 +63,18 @@ public class GameController : MonoBehaviour {
 
         UpdateScore();
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0))
         {
             if(_playerDead)
                 RestartGame();
         }
 
+    }
+
+    public void StartGame()
+    {
+        _gameStart = true;
+        rule.SetActive(false);   
     }
 
     public void ChangeWorld()
